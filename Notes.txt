@@ -1,0 +1,196 @@
+Kyara Crespo Gutierrez
+
+ **February 6th, 2026**
+
+## Tab key will fill out command automatically with the information provided
+E.g. "cd g [press tab]" will fill out automatically with "cd gen711-811"
+
+## mkdir = make new directory
+
+## pwd = print working directory, aka a folder
+"/home/users/kac1224/gen711-811" means that pwd gen711 is inside pwd kac, which is inside pwd users, inside pwd home.
+
+## ls = list
++ Lists pwd's and files within current pwd.
++ ls -F = gives out empty pwd's.
++ man ls = pulls out entire ls manual, but google might be better to find specific commands.
++ ls *[wanted search] = lists results that contain wanted search at the *end* **ONLY**.
++ ls [wanted search]* = lists results that contain wanted search at the *beginning* **ONLY**.
++ ls -l = lists files within directory, shows file size, creation date and time, and file titles.
+
+## ctrl z = cancels command, does not undo
+
+## clear = deletes all previous commands
+
+## cd "directory" = opens wanted directory
++ E.g. cd gen711-811, cd shell_data, cd $HOME
++ cd ../ = gets you out of a directory, adding more ../ will bring you to the next outer directory
++ cd ~ = brings you to home directory
+
+## head + file = opens up only the first few lines of the file
++ head -n[number of lines you want to display] + file = will print out the first, asked number of lines
+
+## grep + [wanted search] = looks up wanted search among the entire pwd you are currently in
++ Sort of like a ctrl+F, but for coding
++ E.g. grep '@' will look for any "at symbols"
++ Adding "^" before the wanted search will give out results with the wanted search at the beginning of the line **ONLY**.
++ grep -B[number] -A[number] [wanted search] + [file] = looks up wanted search within file, and displays the [number] of line Before and After the wanted search.
++ grep -v [unwanted characters] + [file] = prints out the lines within the file that do **NOT** contain the unwanted characters. called "reverse grep"
+
+## [command] | wc -l = counts the number of lines brought up by the command
++ wc (without -l) will give out: lines, words, characters
+
+## [command] > [file name] = will pull up results from command into a new file
+
+# **February 13th, 2026**
+## Hidden files and directories start with . and can be viewed using ls -a.
+## The commands with "*" are using a "wildcard"
+## cp [file from which you're copying] [new file to which you're copying to] = copies file's contents into a new file, aka makes a copy
+
+# **February 20th, 2026**
+## chmod -w [file you want to change permissions on] = removes writing permission from a file
++ chmod ug+rwx [file] = grants reading, writing, and executing permissions to the user and the group.
+
+## rm = remove
+
+## mv [file old name] [file new name] = rename a file
+
+#### **conda activate genomics = allows anaconda to work in bash for certain genomics programs**
+#### **conda deactivate = leaves anaconda environment**
+
+# **February 27th, 2026**
+
+## less = displays entire file on the screen
+
+## Keypoints
+- `grep` is a powerful search tool with many options for customization.
+- `>`, `>>`, and `|` are different ways of redirecting output.
+- `command > file` redirects a command's output to a file.
+- `command >> file` redirects a command's output to a file without overwriting the existing contents of the file. (adds the command to the existing file, combining them)
+- `command_1 | command_2` redirects the output of the first command as input to the second command.
+- `for` loops are used for iteration.
+- `basename` gets rid of repetitive parts of names.
+
+## For loops basic structure:
+- for
+- do
+- done
+
+# **March 6th, 2026**
+## For metadata, do not use special characters, spaces (use underscores instead), or tabs. Especially no commas since these are used to delineate what is part of each column in a csv file.
+- Metadata are tables with every sample in an experiment, and every identifier or conditions or file, etc.
+
+## wget [link] = pulls data from online link into new file
+## uniq = removes any adjacent, repeated values
+- add sort | uniq to remove repeated values everywhere in your data, not just adjacent, identical values.
+- uniq -c will tell you how many duplicates there are of any given value.
+## cut -f[column number] -d[column ending indicator] =  prints only the desired column, indicated by the column ending symbol (such as comma in csv)
+## tr ',' '\n' = makes every comma into a new line, used for csv for example
+
+# Examples
+1. How many different generations exist in the data? 
+
+KCG: cut -f2 -d',' ecoli_metadata_composite.csv | sort | uniq | grep -v 'gen' | wc -l for 25 generations
+
+- only show the second column, which you identify using the commas to know where each column ends, of the file; sort the values; collapse any repeated values so I only see each one represented once; do not show the column header "generation"; count the number of lines.
+
+2. How many rows and how many columns are in this data? 
+
+KCG: head -n1 ecoli_metadata_composite.csv | tr ',' '\n' | wc -l for 12 columns, and grep -v '^strain' ecoli_metadata_composite.csv | wc -l for 62 rows
+
+- only show the first row of the file; convert any comma you find into a new line; count the number of lines. show me everything on the file whose line does not start with "strain"; count the lines.
+
+3. How many citrate+ mutants have been recorded in **Ara-3**?
+
+KCG: cut -f12 -d',' ecoli_metadata_composite.csv | sort | uniq -c | grep 'plus'  
+     10 plus
+
+- only show the twelfth column, which you identify using the commas to know where each column ends, of the file; sort the values; collapse any repeated values so I only see each one represented once, and show me how many instances of each value there are; show me only the data that includes "plus".
+
+4. How many hypermutable mutants have been recorded in **Ara-3**?
+
+KCG: cut -f6 -d',' ecoli_metadata_composite.csv | sort | uniq -c | grep 'plus'  
+      6 plus
+
+- only show the sixth column, which you identify using the commas to know where each column ends, of the file; sort the values; collapse any repeated values so I only see each one represented once, and show me how many instances of each value there are; show me only the data that includes "plus".
+
+ 1. Paste the command(s) below that you used get practical exam pasted into vscode. (2 point)
+wget https://raw.githubusercontent.com/jthmiller/gen711-811/refs/heads/practical-clean/Practical-1.md
+
+### 2. From your home directory, make a new directory to hold fastq files called 'analysis' (2 points)
+ mkdir /home/users/kac1224/gen711-811/analysis
+
+### 3. Copy the fastq files /tmp/gen711_2023/Sample1.fastq and /tmp/gen711_2023/Sample2.fastq directly into the 'analysis' directory without changing your current directory. (2 points, partial credit if you need to change directories first). For todays practice practical, use SRR fastqs instead.
+cp /home/users/kac1224/gen711-811/shell_data/untrimmed_fastq/SRR097977.fastq /home/users/kac1224/gen711-811/analysis/ and  cp /home/users/kac1224/gen711-811/shell_data/untrimmed_fastq/SRR098026.fastq /home/users/kac1224/gen711-811/analysis/
+
+### 4. Use an absolute path to change your current working directory to the 'analysis' folder/directory. (2 points, partial credit for using a relative path)
+ cd /home/users/kac1224/gen711-811/analysis/
+
+### 5. The fastq file you just copied is data from the UNH genome center. This is the first time you've ever seen these FASTQs. To confirm that the format of the FASTQs look ok, view one of the two files and paste the top 4 lines of the file below. (4 points) 
+ head -n4 SRR097977.fastq 
+@SRR097977.1 209DTAAXX_Lenski2_1_7:8:3:710:178 length=36
+TATTCTGCCATAATGAAATTCGCCACTTGTTAGTGT
++SRR097977.1 209DTAAXX_Lenski2_1_7:8:3:710:178 length=36
+CCCCCCCCCCCCCCC>CCCCC7CCCCCCACA?5A5<
+
+### 6. You've decided that you want to make a seperate file of the reads to BLAST them at NCBI to make sure they belong to the species that you sequenced. However, your blast program is written to accept FASTA files rather than FASTQ files (FASTA files only contain the header line above the read, and the read itself). You will need to make a 'FASTA' file from each FASTQ file. Before you make the new files, pipe the output to a command that that allows you to see just the first lines of the output. (5 points)  
+ grep -A1 --no-group-separator @SR SRR097977.fastq | head
+ grep -A1 --no-group-separator @SR SRR098026.fastq | head
+
+#### Hints: 
+### FASTA only needs 2/4 lines that are in a FASTQ: 1) the header line that starts with '@' and 2) the sequence right after the header. However, the base call quality scores could contain '@' as well, which might lead to unwanted matches. 
+### You can use the info in the header line to be very specific about what you are trying to match. 
+### Add the '--no-group-separator' option to the other options of your command to keep the '--' out of the output
+
+### 7. Redirect the output of your command (command in 6 that is converting the format of the FASTQ into FASTA) into new files. Give the new file the same names, but uses the '.fasta' extension rather than the '.fastq' extension of the original file name. (5 points)
+ grep -A1 --no-group-separator @SR SRR098026.fastq > SRR098026.fasta 
+ grep -A1 --no-group-separator @SR SRR097977.fastq > SRR097977.fasta
+
+### 8. How many reads have 15 or more uncalled bases (NNNNNNNNNNNNNNN) in both samples? Count the number of reads in both WITHOUT making a new file. (4 points)
+ grep NNNNNNNNNNNNNNN SRR097977.fasta SRR098026.fasta | wc -l
+100
+
+### 9. Make a new directory called 'to_blast' in your current directory. Then, move the two fasta files into this new 'to_blast' directory (4 points)
+mkdir /home/users/kac1224/gen711-811/to_blast
+mv SRR097977.fasta /home/users/kac1224/gen711-811/to_blast/
+mv SRR098026.fasta /home/users/kac1224/gen711-811/to_blast/
+
+### 10. Without changing directories, what command could you use to confirm that the files made it into the 'to_blast' folder. (2 points)
+ ls /home/users/kac1224/gen711-811/to_blast/
+
+### 11. What is the 100th line in the SSR0977977.fasta file? (hint: the 'head' command is one way to do this- but you may need to specify an option) (2 points)
+ head -n100 /home/users/kac1224/gen711-811/to_blast/SRR097977.fasta 
+ GCGGAGCTGGTGATTGGCGAACTGCTGCTGCTATTT
+
+### 12. Run md5sum on SRR097977.fasta (md5sum SRR097977.fasta). Then, run it again, but redirect the output to a new file called 'my_md5sums.txt'.  (2 points)
+ md5sum /home/users/kac1224/gen711-811/to_blast/SRR097977.fasta > /home/users/kac1224/gen711-811/to_blast/my_md5sums.txt
+
+### 13. Next, run the md5sum command on SRR098026.fasta and add it to the end of 'my_md5sums.txt'. (2 points)
+ md5sum /home/users/kac1224/gen711-811/to_blast/SRR098026.fasta >> /home/users/kac1224/gen711-811/to_blast/my_md5sums.txt 
+
+### 14. Lastly, add your name to the end of 'my_md5sums.txt' file. (2 points)
+ mv /home/users/kac1224/gen711-811/to_blast/my_md5sums.txt /home/users/kac1224/gen711-811/to_blast/my_md5sumsKyaraCrespo.txt 
+
+### Extra credit: Run fastqc on one of the fastq files, and one of the fasta files. Did they both run? Why or why not?  (2 points)
+No, only the fastq file worked because the fastqc command only works when you have the fastq format, with the header line, the sequence, the quality header line, and quality scores.
+
+code:
+conda activate genomics
+
+fastqc SRR097977.fastq 
+null
+Started analysis of SRR097977.fastq
+Analysis complete for SRR097977.fastq
+
+fastqc /home/users/kac1224/gen711-811/to_blast/SRR097977.fasta 
+null
+Failed to process /home/users/kac1224/gen711-811/to_blast/SRR097977.fasta
+uk.ac.babraham.FastQC.Sequence.SequenceFormatException: Midline '@SRR097977.2 209DTAAXX_Lenski2_1_7:8:3:365:371 length=36' didn't start with '+' at 3
+        at uk.ac.babraham.FastQC.Sequence.FastQFile.readNext(FastQFile.java:179)
+        at uk.ac.babraham.FastQC.Sequence.FastQFile.<init>(FastQFile.java:93)
+        at uk.ac.babraham.FastQC.Sequence.SequenceFactory.getSequenceFile(SequenceFactory.java:106)
+        at uk.ac.babraham.FastQC.Sequence.SequenceFactory.getSequenceFile(SequenceFactory.java:62)
+        at uk.ac.babraham.FastQC.Analysis.OfflineRunner.processFile(OfflineRunner.java:163)
+        at uk.ac.babraham.FastQC.Analysis.OfflineRunner.<init>(OfflineRunner.java:125)
+        at uk.ac.babraham.FastQC.FastQCApplication.main(FastQCApplication.java:316)
+
